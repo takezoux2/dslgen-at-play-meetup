@@ -142,7 +142,7 @@ class RepositoryGen extends Generator[Entity] {
       s"'${f.name} -> ${f.name}"
     }).mkString(",")
     val orderBy = index.order match{
-      case Some(ascOrDesc) => "ORDER BY " + ascOrDesc
+      case Some(ascOrDesc) => s"ORDER BY ${index.fields.last} ${ascOrDesc}"
       case None => ""
     }
 

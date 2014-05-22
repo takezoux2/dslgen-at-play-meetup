@@ -1,5 +1,6 @@
 import com.geishatokyo.dslgen.dsl.{ModelDSLParser, ControllerDSLParser}
 import com.geishatokyo.dslgen.generator._
+import com.geishatokyo.dslgen.{PostMethod, GetMethod}
 import java.io.{FileOutputStream, File, FileInputStream}
 
 /**
@@ -65,7 +66,7 @@ object App {
     controllers.foreach(c => {
       c.methods.foreach( m => {
         val (filename,code) = viewGen.generate(c -> m)
-        write("server/app/views/" + filename,code)
+        write("server/app/views/" + filename,code,m.isInstanceOf[PostMethod])
       })
     })
 

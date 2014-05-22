@@ -58,7 +58,7 @@ class ViewGen extends Generator[(Controller,Method)] {
         |    <div class="form-group">
         |        <label for="${p.name}" class="col-sm-2 control-label">${p.name}</label>
         |        <div class="col-sm-10">
-        |            <input type="email" class="form-control" id="${p.name}" name="${p.name}">
+        |            <input type="text" class="form-control" id="${p.name}" name="${p.name}">
         |        </div>
         |    </div>
       """.stripMargin
