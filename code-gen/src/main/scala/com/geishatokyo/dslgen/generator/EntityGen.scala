@@ -13,8 +13,10 @@ class EntityGen extends Generator[Entity] {
     "Long" -> "long"
   )
 
-  def generate(entity : Entity) : String = {
-
+  def generate(entity : Entity)  = {
+    (entity.name + ".scala") -> code(entity)
+  }
+  def code(entity : Entity) = {
     def fields = entity.fields.map(f => {
       s"${f.name} : ${f.fieldType.scalaType}"
     }).mkString(",")

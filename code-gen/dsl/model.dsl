@@ -11,6 +11,7 @@ entity User{
 entity Tweet{
   id : Long PK,
   userId : Long,
+  nickname : String,
   message : BigString Emoji
 }
 index {

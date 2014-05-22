@@ -11,11 +11,11 @@ trait Auth {
   self : Controller =>
 
 
-  def Authenticated(block: User => Result): Action[AnyContent] = Action(req => {
+  def Authenticated(block: (User,Request[AnyContent]) => Result): Action[AnyContent] = Action(req => {
     req.session.get("userId") match{
       case Some(userId) => {
         Repositories.userRepository.getById(userId.toLong) match{
-          case Some(user) => block(user)
+          case Some(user) => block(user,req)
           case None => {
             Redirect(routes.UserController.signUp())
           }

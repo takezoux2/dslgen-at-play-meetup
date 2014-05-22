@@ -12,6 +12,6 @@ trait Generator[T] {
     }
   }
 
-  def generate(model : T) : String
+  def generate(model : T) : (String,String)
 }
 

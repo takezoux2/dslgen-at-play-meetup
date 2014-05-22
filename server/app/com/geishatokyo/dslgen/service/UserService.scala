@@ -1,11 +1,10 @@
 package com.geishatokyo.dslgen.service
 
 import com.geishatokyo.dslgen.entity.User
-import com.geishatokyo.dslgen.repository.UserRepository
 import com.geishatokyo.dslgen.Repositories
 
 /**
- * Created by takeshita on 2014/05/16.
+ *
  */
 object UserService {
 

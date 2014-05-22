@@ -6,7 +6,7 @@ import com.geishatokyo.dslgen.{EntityIndex, Entity, EntityField, FieldType}
 /**
  * Created by takeshita on 2014/05/16.
  */
-class DSLParser extends RegexParsers {
+class ModelDSLParser extends RegexParsers {
 
   def className = "[a-zA-Z_0-9]+".r
   def fieldName = "[a-zA-Z_0-9]+".r

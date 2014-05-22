@@ -2,12 +2,11 @@ package com.geishatokyo.dslgen.repository
 
 import com.geishatokyo.dslgen.entity.User
 import anorm._
-import java.sql.Connection
 import play.api.db.DB
 import play.api.Play.current
 
 /**
- * Created by takeshita on 2014/05/16.
+ * UserRepository
  */
 trait UserRepository {
 
