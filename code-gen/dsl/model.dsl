@@ -12,8 +12,9 @@ entity Tweet{
   id : Long PK,
   userId : Long,
   nickname : String,
-  message : BigString Emoji
+  message : BigString Emoji,
+  writeTime : Long
 }
 index {
-  (userId,id).desc
+  (userId,writeTime).desc
 }

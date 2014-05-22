@@ -1,6 +1,6 @@
 package com.geishatokyo.dslgen.generator
 
-import com.geishatokyo.dslgen.Entity
+import com.geishatokyo.dslgen.{EntityIndex, EntityField, Entity}
 
 /**
  * Created by takeshita on 2014/05/17.
@@ -14,13 +14,16 @@ class RepositoryGen extends Generator[Entity] {
   def code(entity : Entity) = {
 
     val name = entity.name
-    val (declarations,impls) = (insertCode(entity) :: updateCode(entity) :: Nil).unzip
+
+    val uniques = entity.fields.filter(f => f.hasOption("PK") || f.hasOption("Unique")).map(f => getUnique(entity,f))
+    val indexes = entity.indexes.map(i => getIndex(entity,i))
+    val (declarations,impls) = (insertCode(entity) :: updateCode(entity) :: (uniques ::: indexes)).unzip
 
 
     s"""
       |package com.geishatokyo.dslgen.repository
       |
-      |import com.geishatokyo.dslgen.entity.User
+      |import com.geishatokyo.dslgen.entity._
       |import anorm._
       |import play.api.db.DB
       |import play.api.Play.current
@@ -30,11 +33,16 @@ class RepositoryGen extends Generator[Entity] {
       | */
       |trait ${name}Repository {
       |  ${declarations.mkString("\n")}
+      |
+      |  //##hold
+      |  //##end
       |}
       |
       |
       |class MySQL${name}Repository extends ${name}Repository{
       |  ${impls.mkString("\n")}
+      |  //##hold
+      |  //##end
       |}
     """.stripMargin
   }
@@ -84,19 +92,72 @@ class RepositoryGen extends Generator[Entity] {
       s"'${f.name} -> ${paramName}.${f.name}"
     }).mkString(",")
 
-    val declare = s"""def update(${paramName} : ${entity.name}) : Option[${entity.name}]"""
+    val declare = s"""def update(${paramName} : ${entity.name}) : Boolean"""
 
     val impl =
       s"""
         |  override def update(${paramName} : ${entity.name}) = {
         |    DB.withTransaction {implicit conn =>{
         |      SQL("UPDATE ${entity.name} Set ${setDeclaration} WHERE id = {id};")
-        |        .on('id -> ${paramName}.id,${assign}).executeInsert().get
+        |        .on('id -> ${paramName}.id,${assign}).executeInsert().get > 0
         |    }}
         |  }
       """.stripMargin
 
     declare -> impl
+  }
+
+  def getUnique( entity : Entity, field : EntityField) = {
+    val declare = s"""  def getBy${field.name.capitalize}(${field.name} : ${field.fieldType.scalaType}): Option[${entity.name}]"""
+    val impl = s"""
+      |  override def getBy${field.name.capitalize}(${field.name} : ${field.fieldType.scalaType}): Option[${entity.name}] = {
+      |    DB.withTransaction {
+      |      implicit conn =>
+      |        SQL("SELECT * FROM ${entity.name} Where ${field.name} = {${field.name}}").on('${field.name} -> ${field.name}).as(${entity.name}.anormParser.singleOpt)
+      |    }
+      |  }
+    """.stripMargin
+
+    declare -> impl
+  }
+
+  def getIndex(entity : Entity,index : EntityIndex) = {
+
+    val name = index.fields.map(_.capitalize).mkString + index.order.map(_.capitalize).getOrElse("")
+
+    val fields = if(index.order.isDefined){
+      index.fields.dropRight(1).map(n => entity.fields.find(_.name == n).get)
+    }else {
+      index.fields.map(n => entity.fields.find(_.name == n).get)
+    }
+    val params = {
+      fields.map(f => {
+        s"${f.name} : ${f.fieldType.scalaType}"
+      }).mkString
+    }
+    val conditions = fields.map(f => {
+      s"${f.name} = {${f.name}}"
+    }).mkString(" and ")
+    val asign = fields.map(f => {
+      s"'${f.name} -> ${f.name}"
+    }).mkString(",")
+    val orderBy = index.order match{
+      case Some(ascOrDesc) => "ORDER BY " + ascOrDesc
+      case None => ""
+    }
+
+    val declare = s"""  def getBy${name}(${params}): List[${entity.name}]"""
+    val impl = s"""
+      |  override def getBy${name}(${params}): List[${entity.name}] = {
+      |    DB.withTransaction {
+      |      implicit conn =>
+      |        SQL("SELECT * FROM ${entity.name} Where ${conditions} ${orderBy}").on(${asign}).as(${entity.name}.anormParser.*)
+      |    }
+      |  }
+    """.stripMargin
+
+    declare -> impl
+
   }
 
 }

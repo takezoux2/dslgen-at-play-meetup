@@ -2,9 +2,9 @@ package com.geishatokyo.dslgen.entity
 import anorm.SqlParser._
 
 /**
- * Created by takeshita on 2014/05/16.
+ * Auto-generated code
  */
-case class User(id : Long, nickname : String, email : String, password : String) {
+case class User(id : Long,nickname : String,email : String,password : String) {
 
 }
 

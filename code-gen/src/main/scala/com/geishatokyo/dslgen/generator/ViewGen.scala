@@ -19,7 +19,11 @@ class ViewGen extends Generator[(Controller,Method)] {
 
   def viewForGET( c : Controller, m : GetMethod) = {
 
-    val data = s"obj : ${m.result.scalaType}"
+    val modelType = m.result match{
+      case FieldType.ListOf(t) => s"List[${t.scalaType}Model]"
+      case t => t.scalaType + "Model"
+    }
+    val data = s"obj : ${modelType}"
     val showData = m.result match{
       case FieldType.ListOf(t) => {
         """@for( d <- obj){

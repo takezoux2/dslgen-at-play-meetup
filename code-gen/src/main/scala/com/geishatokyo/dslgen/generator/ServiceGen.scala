@@ -7,7 +7,7 @@ import com.geishatokyo.dslgen.{Param, PostMethod, GetMethod, Controller}
   */
 class ServiceGen extends Generator[Controller] {
    override def generate(c: Controller): (String, String) = {
-     (c.name + "Service.scala") -> code(c)
+     ("I" + c.name + "Service.scala") -> code(c)
    }
 
    def code( c : Controller) = {

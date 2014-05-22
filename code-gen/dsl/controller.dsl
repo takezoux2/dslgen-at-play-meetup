@@ -7,7 +7,7 @@ controller Timeline{
     receive {
       message : String
     }
-    redirect Timeline.all
+    redirect TimelineController.all
   }
 
 }

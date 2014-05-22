@@ -63,6 +63,13 @@ object App {
       })
     })
 
+    val routesGen = new RoutesGen()
+
+    {
+      val (filename,code) = routesGen.generate(controllers)
+      write("server/conf/" + filename,code)
+    }
+
   }
 
 

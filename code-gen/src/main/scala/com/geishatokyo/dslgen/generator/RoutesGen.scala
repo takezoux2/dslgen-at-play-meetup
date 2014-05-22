@@ -5,7 +5,7 @@ import com.geishatokyo.dslgen.{PostMethod, GetMethod, Controller, Entity}
 /**
  * Created by takeshita on 2014/05/16.
  */
-class RoutesGen extends Generator[Controller] {
+class RoutesGen extends Generator[List[Controller]] {
 
   val base = """# Routes
                |# This file defines all application routes (Higher priority routes first)
@@ -22,17 +22,18 @@ class RoutesGen extends Generator[Controller] {
                |GET     /assets/*file               controllers.Assets.at(path="/public", file)
                |
                |# generated routes
-               |"""
+               |""".stripMargin
 
-  override def generate(model: Controller): (String, String) = {
-    "routes" -> (base + model.methods.map({
+  override def generate(model: List[Controller]): (String, String) = {
+    "routes" -> (base + model.flatMap(c => c.methods.flatMap({
       case GetMethod(name,r) => {
-        s"GET    /${model.name.decapitalize}/${name}  controllers.${model.name}Controller.${name}"
+        List(s"GET    /${c.name.decapitalize}/${name}  controllers.${c.name}Controller.${name}")
       }
       case PostMethod(name,_,_) => {
-        s"POST   /${model.name.decapitalize}/${name}  controllers.${model.name}Controller.${name}"
+        List(s"GET   /${c.name.decapitalize}/${name}  controllers.${c.name}Controller.${name}",
+        s"POST   /${c.name.decapitalize}/${name}  controllers.${c.name}Controller.do${name.capitalize}")
       }
-    }).mkString("\n"))
+    })).mkString("\n"))
 
 
   }
