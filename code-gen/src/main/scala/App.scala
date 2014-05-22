@@ -21,19 +21,19 @@ object App {
     val entityGen = new EntityGen()
     entities.foreach(e => {
       val (filename,code) = entityGen.generate(e)
-      write("target/gen/" + filename,code)
+      write("server/app/com/geishatokyo/dslgen/entity/" + filename,code)
     })
 
     val repoGen = new RepositoryGen()
     entities.foreach(e => {
       val (filename,code) = repoGen.generate(e)
-      write("target/gen/" + filename,code)
+      write("server/app/com/geishatokyo/dslgen/repository/" + filename,code)
     })
 
     val sqlGen = new SQLGen()
     entities.foreach(e => {
       val (filename,code) = sqlGen.generate(e)
-      write("target/gen/" + filename,code)
+      write("target/sql/" + filename,code)
     })
 
     println(entities)
@@ -46,20 +46,20 @@ object App {
     val contGen = new ControllerGen
     controllers.foreach(c => {
       val (filename,code) = contGen.generate(c)
-      write("target/gen/" + filename,code)
+      write("server/app/controllers/" + filename,code)
     })
 
     val serviceGen = new ServiceGen
     controllers.foreach(c => {
       val (filename,code) = serviceGen.generate(c)
-      write("target/gen/" + filename,code)
+      write("server/app/com/geishatokyo/dslgen/service/" + filename,code)
     })
 
     val viewGen = new ViewGen
     controllers.foreach(c => {
       c.methods.foreach( m => {
         val (filename,code) = viewGen.generate(c -> m)
-        write("target/gen/" + filename,code)
+        write("server/app/views/" + filename,code)
       })
     })
 
