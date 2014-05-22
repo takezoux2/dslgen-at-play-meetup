@@ -10,6 +10,8 @@ import com.geishatokyo.dslgen.Controller
  * Created by takeshita on 2014/05/23.
  */
 class ControllerGen extends Generator[Controller] {
+
+
   override def generate(c: Controller): (String, String) = {
     (c.name + "Controller.scala") -> code(c)
   }

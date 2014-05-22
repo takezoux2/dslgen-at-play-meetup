@@ -1,9 +1,8 @@
 package models
 
-import com.geishatokyo.dslgen.entity.User
+import com.geishatokyo.dslgen.entity._
 
 /**
- * Created by takeshita on 2014/05/22.
  */
 case class UserModel(user : User) {
 
@@ -13,8 +12,10 @@ case class UserModel(user : User) {
 object UserModel{
   /**
    * 簡易Proxyのための暗黙変換
-   * @param um
+   * @param user
    * @return
    */
-  implicit def toUser(um : UserModel) = um.user
+  implicit def proxy(m : UserModel) = m.user
+  def from(e : User) = UserModel(e)
+  def from(list : List[User]) = list.map(UserModel(_))
 }

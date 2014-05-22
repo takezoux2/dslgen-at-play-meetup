@@ -35,7 +35,11 @@ object App {
       val (filename,code) = sqlGen.generate(e)
       write("target/sql/" + filename,code)
     })
-
+    val mvcModelGen = new MVCModelGen()
+    entities.foreach(e => {
+      val (filename,code) = mvcModelGen.generate(e)
+      write("server/app/models/" + filename,code,false)
+    })
     println(entities)
   }
 
@@ -51,8 +55,10 @@ object App {
 
     val serviceGen = new ServiceGen
     controllers.foreach(c => {
+      val (iFilename,iCode) = serviceGen.generateInterface(c)
+      write("server/app/com/geishatokyo/dslgen/service/" + iFilename,iCode)
       val (filename,code) = serviceGen.generate(c)
-      write("server/app/com/geishatokyo/dslgen/service/" + filename,code)
+      write("server/app/com/geishatokyo/dslgen/service/" + filename,code,false)
     })
 
     val viewGen = new ViewGen
@@ -81,11 +87,13 @@ object App {
     new String(d,"utf-8")
   }
 
-  def write(filePath : String,code : String) = {
+  def write(filePath : String,code : String,overwrite : Boolean = true) : Unit = {
     val f = new File(filePath)
     if(!f.getParentFile.exists()){
       f.getParentFile.mkdirs()
     }
+
+    if(!overwrite && f.exists()) return
 
     val fos = new FileOutputStream(f)
     fos.write(code.getBytes("utf-8"))
