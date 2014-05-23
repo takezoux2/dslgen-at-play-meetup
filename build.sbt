@@ -1,8 +1,25 @@
 
+val genCodeAction : State => State = s => {
+  val s2 = Command.process("project codeGen",s)
+  Command.process("run",s2)
+  s
+}
+
+val generateCode = Command.command("generateCode")(genCodeAction)
+
+val runServerAction : State => State = s => {
+  val s2 = Command.process("project server",s)
+  Command.process("run",s2)
+  s
+}
+
+val runServer = Command.command("run")(runServerAction)
 
 lazy val root =
         project.in( file(".") )
-   .aggregate(server)
+   .settings(
+     commands ++= Seq(generateCode,runServer)
+   ).aggregate(server)
 
   
 lazy val server = project.in(file("server"))
