@@ -34,7 +34,7 @@ object App {
     val sqlGen = new SQLGen()
     entities.foreach(e => {
       val (filename,code) = sqlGen.generate(e)
-      write("target/sql/" + filename,code)
+      write("sql/" + filename,code)
     })
     val mvcModelGen = new MVCModelGen()
     entities.foreach(e => {

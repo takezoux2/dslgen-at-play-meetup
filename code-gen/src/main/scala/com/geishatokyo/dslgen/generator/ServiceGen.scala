@@ -14,11 +14,11 @@ class ServiceGen extends Generator[Controller] {
     val name = c.name
     val methods = c.methods.map({
       case g : GetMethod => {
-        s"  def get${g.name.capitalize}(user : User) : ${g.result.scalaType} = ???"
+        s"  def get${g.name.capitalize}(user : User) : ${g.result.scalaType} = "
       }
       case p : PostMethod => {
         val params = p.receive.map(p => p.name + " : " + p.paramType.scalaType).mkString(",")
-        s"  def ${p.name}(user : User,${params}) : Unit = ???"
+        s"  def ${p.name}(user : User,${params}) : Unit = "
       }
     }).mkString("\n")
 

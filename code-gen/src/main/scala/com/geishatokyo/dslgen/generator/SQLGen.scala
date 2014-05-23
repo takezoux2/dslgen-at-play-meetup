@@ -30,7 +30,7 @@ class SQLGen extends Generator[Entity] {
       s"  INDEX (${i.fields.mkString(",")})"
     }).mkString(",\n")
     s"""
-      |CREATE TABLE ${entity.name}(
+      |CREATE TABLE IF NOT EXISTS ${entity.name}(
       |${fields}${if(indexes.length > 0) ",\n" else ""}
       |${indexes}
       |);

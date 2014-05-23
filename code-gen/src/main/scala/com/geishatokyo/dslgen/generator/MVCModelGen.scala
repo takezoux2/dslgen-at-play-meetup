@@ -17,6 +17,16 @@ class MVCModelGen extends Generator[Entity] {
       | */
       |case class ${e.name}Model(${e.name.decapitalize} : ${e.name}) {
       |
+      |  def asNiceHtml = {
+      |    classOf[${e.name}].getMethods.map(m => {
+      |      if(m.getParameterTypes.length == 0 &&
+      |        (m.getName != "toString" && m.getName != "hashCode")){
+      |        <div class="row">
+      |          <div class="col-sm-4">{m.getName}</div><div class="col-sm-8">{m.invoke(${e.name.decapitalize}).toString}</div>
+      |        </div>
+      |      }
+      |    }).mkString("\n")
+      |  }
       |}
       |
       |
