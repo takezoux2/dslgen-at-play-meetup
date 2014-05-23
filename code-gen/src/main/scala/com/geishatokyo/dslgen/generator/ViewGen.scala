@@ -28,15 +28,15 @@ class ViewGen extends Generator[(Controller,Method)] {
     val showData = m.result match{
       case FieldType.ListOf(t) => {
         """@for( d <- obj){
-          |  <div>
-          |    @d.toString
+          |  <div class="panel panel-success">
+          |    @d.asNiceHtml
           |  </div>
           |}
         """.stripMargin
       }
       case d => {
         """<div>
-          |    @d.toString
+          |    @d.asNiceHtml
           |</div>
         """.stripMargin
       }

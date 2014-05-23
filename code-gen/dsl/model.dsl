@@ -16,5 +16,6 @@ entity Tweet{
   writeTime : Long
 }
 index {
-  (userId,writeTime).desc
+  (userId,writeTime).desc,
+  (writeTime).desc
 }

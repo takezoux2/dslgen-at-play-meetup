@@ -135,9 +135,11 @@ class RepositoryGen extends Generator[Entity] {
         s"${f.name} : ${f.fieldType.scalaType}"
       }).mkString
     }
-    val conditions = fields.map(f => {
+    val conditions = if(fields.size > 0)"WHERE" + fields.map(f => {
       s"${f.name} = {${f.name}}"
     }).mkString(" and ")
+    else ""
+
     val asign = fields.map(f => {
       s"'${f.name} -> ${f.name}"
     }).mkString(",")
@@ -151,7 +153,7 @@ class RepositoryGen extends Generator[Entity] {
       |  override def getBy${name}(${params}): List[${entity.name}] = {
       |    DB.withTransaction {
       |      implicit conn =>
-      |        SQL("SELECT * FROM ${entity.name} Where ${conditions} ${orderBy}").on(${asign}).as(${entity.name}.anormParser.*)
+      |        SQL("SELECT * FROM ${entity.name} ${conditions} ${orderBy}").on(${asign}).as(${entity.name}.anormParser.*)
       |    }
       |  }
     """.stripMargin

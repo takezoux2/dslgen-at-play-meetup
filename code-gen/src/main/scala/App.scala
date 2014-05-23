@@ -66,7 +66,7 @@ object App {
     controllers.foreach(c => {
       c.methods.foreach( m => {
         val (filename,code) = viewGen.generate(c -> m)
-        write("server/app/views/" + filename,code,m.isInstanceOf[PostMethod])
+        write("server/app/views/" + filename,code)
       })
     })
 
