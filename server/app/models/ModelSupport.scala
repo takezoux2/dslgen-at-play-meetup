@@ -1,6 +1,5 @@
 package models
 
-import com.geishatokyo.dslgen.entity.Tweet
 import play.api.templates.Html
 import java.lang.reflect.Modifier
 
