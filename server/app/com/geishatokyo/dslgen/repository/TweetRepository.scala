@@ -55,7 +55,7 @@ class MySQLTweetRepository extends TweetRepository{
   override def getByUserIdWriteTimeDesc(userId : Long): List[Tweet] = {
     DB.withTransaction {
       implicit conn =>
-        SQL("SELECT * FROM Tweet WHEREuserId = {userId} ORDER BY writeTime desc").on('userId -> userId).as(Tweet.anormParser.*)
+        SQL("SELECT * FROM Tweet WHERE userId = {userId} ORDER BY writeTime desc").on('userId -> userId).as(Tweet.anormParser.*)
     }
   }
     

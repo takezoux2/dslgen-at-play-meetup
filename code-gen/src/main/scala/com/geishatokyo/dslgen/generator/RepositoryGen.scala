@@ -135,7 +135,7 @@ class RepositoryGen extends Generator[Entity] {
         s"${f.name} : ${f.fieldType.scalaType}"
       }).mkString
     }
-    val conditions = if(fields.size > 0)"WHERE" + fields.map(f => {
+    val conditions = if(fields.size > 0)"WHERE " + fields.map(f => {
       s"${f.name} = {${f.name}}"
     }).mkString(" and ")
     else ""

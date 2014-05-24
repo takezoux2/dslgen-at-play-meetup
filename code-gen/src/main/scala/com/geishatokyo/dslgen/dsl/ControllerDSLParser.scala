@@ -20,7 +20,7 @@ class ControllerDSLParser extends RegexParsers {
     }) |
       (className ^^ {
     case "String" => FieldType.String
-    case "BigString" => FieldType.String
+    case "BigString" => FieldType.BigString
     case "Int" => FieldType.Int
     case "Long" => FieldType.Long
     case s => FieldType.Class(s)
