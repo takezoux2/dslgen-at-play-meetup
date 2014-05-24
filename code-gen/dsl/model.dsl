@@ -8,6 +8,7 @@ entity User{
 }
 
 
+
 entity Tweet{
   id : Long PK,
   userId : Long,

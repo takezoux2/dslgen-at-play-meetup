@@ -14,6 +14,9 @@ trait UserRepository {
 def update(user : User) : Boolean
   def getById(id : Long): Option[User]
   def getByEmail(email : String): Option[User]
+
+  //##hold
+  //##end
 }
 
 
@@ -55,5 +58,7 @@ class MySQLUserRepository extends UserRepository{
     }
   }
     
+  //##hold
+  //##end
 }
     

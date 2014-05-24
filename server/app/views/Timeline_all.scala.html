@@ -1,0 +1,14 @@
+
+@(user : UserModel,obj : List[TweetModel])
+
+@main("Timeline all") {
+
+@for( d <- obj){
+  <div class="panel panel-success">
+    @d.asNiceHtml
+  </div>
+}
+        
+
+}
+    

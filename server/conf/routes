@@ -11,3 +11,8 @@ POST    /do_sign_in                 controllers.UserController.doSignIn
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+# generated routes
+GET    /timeline/all  controllers.TimelineController.all
+GET   /timeline/write  controllers.TimelineController.write
+POST   /timeline/write  controllers.TimelineController.doWrite
